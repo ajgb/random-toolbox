@@ -144,7 +144,7 @@ yay_parse() {
    sed -n -e "s|^\($s\)\($w\)$s:$s\"\(.*\)\"$s\$|\1$fs\2$fs\3|p" \
           -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p" "$input" |
    awk -F$fs 'BEGIN { indent_mod = 0 } {
-      indent       = length($1)/2;
+      indent       = length($1);
       key          = $2;
       value        = $3;
 
