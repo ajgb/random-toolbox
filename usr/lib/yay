@@ -155,10 +155,9 @@ yay_parse() {
       } else {
         if ( indent_mod == 0 ) {
           indent_mod = indent;
-         } else {
-            if ( indent_mod > 0 ) {
-              indent=indent/indent_mod;
-            }
+         }
+         if ( indent_mod > 0 ) {
+           indent=indent/indent_mod;
          }
         prefix = root_prefix; parent_key = keys[indent-1];
       }
