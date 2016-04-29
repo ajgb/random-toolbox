@@ -42,7 +42,8 @@
 # of space characters (`TAB` isn't valid YAML), each representing one level of
 # indentation. 
 #
-# Note that, unlike YAML, two spaces must be used for each level of indentation.
+# Note that, unlike YAML, the same number of spaces must be used for each level
+# of indentation.
 #
 # If a line does not have a value then it defines a new collection of key/value
 # pairs which follow in subsequent lines and have one more level of indent.
@@ -142,7 +143,7 @@ yay_parse() {
    local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
    sed -n -e "s|^\($s\)\($w\)$s:$s\"\(.*\)\"$s\$|\1$fs\2$fs\3|p" \
           -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p" "$input" |
-   awk -F$fs '{
+   awk -F$fs 'BEGIN { indent_mod = 0 } {
       indent       = length($1)/2;
       key          = $2;
       value        = $3;
@@ -152,6 +153,13 @@ yay_parse() {
       if (indent ==0 ) {
         prefix = "";          parent_key = "'$prefix'";
       } else {
+        if ( indent_mod == 0 ) {
+          indent_mod = indent;
+         } else {
+            if ( indent_mod > 0 ) {
+              indent=indent/indent_mod;
+            }
+         }
         prefix = root_prefix; parent_key = keys[indent-1];
       }
 
